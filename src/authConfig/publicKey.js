@@ -1,0 +1,13 @@
+const publicKey = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnQPnEKjuQixKwANkC6yD
+GtY1u30EvrIf3IDiLgovWVkT0E6vg5MdICqnZNWjjE2c3z2VjF9Xt7I8XfQnafk5
+xG8NtC0cIIuRRGTn+nbpKNdfXezCn+bRA+M259yyfTpsUNAFhrUsyQXSbuqrrTah
+y09f3Ix2VXPCoYo8MVYkV2738xsYDZlN/9JUqy12n2yLjn3nV8nuIXiiaHIP8D47
+s6mYYq0T0tc8A75etYOtt3Gc/bMtZ66m3ksficvpxtrUIFvqa+GtSN+b4ANWP1bR
+R1wFXP/S4rHHi3/HxGQi7nng1gl0O8VkJchz8pD6RSIwRGShHKOrf1jVallzQLbw
+OQIDAQAB
+-----END PUBLIC KEY-----`
+
+module.exports = {
+    publicKey
+}
