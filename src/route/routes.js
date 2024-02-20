@@ -1,5 +1,6 @@
 const controller = require('../controller/test');
 const userController = require('../controller/userController')
+const countryController = require('../controller/countryState')
 module.exports = function (app) {
   app.route('/test').post(controller.uploadImage)
   /**
@@ -32,5 +33,11 @@ module.exports = function (app) {
   app.route('/generateOtpForRegistration').post(userController.generatOtpForRegistration)
   app.route('/verifyOtpForRegistration').post(userController.verifyOtpForRegistration)
   app.route('/login').post(userController.login)
-
+  app.route('/user/getProfile').get(userController.getProfile)
+  app.route('/user/editProfile').post(userController.editProfile)
+  app.route('/master/countriesDropdown').get(countryController.getCountryDropDown)
+  app.route('/master/statesDropdown').get(countryController.getStateByCountryId)
+  app.route('/master/citiesDropdown').get(countryController.getCityByStateId)
+  app.route('/master/countryCodes').get(countryController.getCountryCodes)
+  app.route('/user/changePassword').post(userController.changePassword)
 }

@@ -30,7 +30,7 @@ const auth = async (req, res, next) => {
     try {
         // Extract JWT token from request headers
         const token = req.headers.authorization?.split(' ')[1];
-        const nonSecurePaths = ['/test', '/generateOtpForRegistration', '/verifyOtpForRegistration', '/login']; // Define non-secure paths
+        const nonSecurePaths = ['/captcha', '/test', '/generateOtpForRegistration', '/verifyOtpForRegistration', '/login']; // Define non-secure paths
 
         // Check if request path is in non-secure paths, if yes, proceed to next middleware
         if (nonSecurePaths.includes(req.path)) {
@@ -41,7 +41,7 @@ const auth = async (req, res, next) => {
         if (token) {
             // Verify JWT token with public key
             const userDetail = await jwt.verify(token, publicKEY, { expiresIn: '12h', algorithms: ['RS256'] });
-            if (!userDetail.userId || !userDetail.username) {
+            if (!userDetail.userId && !userDetail.id) {
                 res.status(401).json({ status: 401, message: 'Malware or invalid token detected', data: [], error: true });
             } else {
                 next(); // Proceed to next middleware
