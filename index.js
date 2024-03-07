@@ -12,11 +12,13 @@ const routes = require('./src/route/routes'); // Import API routes
 const jwtAuthentication = require('./src/authConfig/jwtAuthentication'); // JWT authentication middleware
 const expressFileUpload = require('express-fileupload'); // Middleware for file uploads
 const path = require('path');
+const fs = require('fs')
 const logger = require('./src/helper/logger'); // Custom logger
 const swaggerUi = require('swagger-ui-express'); // Swagger UI for API documentation
 const swaggerConfig = require('./src/config/swaggerConfig'); // Swagger configuration
 const StompServer = require('stomp-broker-js'); // Stomp server for messaging
 const swaggerJSDoc = require('swagger-jsdoc');
+const config = require('./src/config/config')
 
 // Set up CORS middleware to allow cross-origin requests
 app.use(cors());
@@ -70,4 +72,5 @@ stompServer.subscribe('/echo', (msg, headers) => {
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
     require('./src/utils/testSchesuller'); // Start any additional server tasks
+    require('./src/utils/captchaScheduller')
 });
