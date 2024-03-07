@@ -1,6 +1,6 @@
 // Importing the 'swagger-jsdoc' library
 const swaggerJSDoc = require('swagger-jsdoc');
-
+require('../route/routes.js')
 // Swagger definition object defining metadata about the API
 const swaggerDefinition = {
     openapi: '3.0.0', // Specify the OpenAPI version
@@ -11,7 +11,7 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://localhost:4000' // Base URL of the API
+            url: 'http://localhost:4001' // Base URL of the API
         }
     ],
     components: {

@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 // Import required modules
-const port = process.env.PORT || 4000; // Use provided PORT or default to 4000
+const port = process.env.PORT || 4001; // Use provided PORT or default to 4000
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);

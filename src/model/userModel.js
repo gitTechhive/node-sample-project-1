@@ -2,10 +2,10 @@ const sql = require('../config/dbConfig');
 
 const signUpUser = (data) => {
     return new Promise((resolve, reject) => {
-        let { firstName, lastName, mobileNo, login_id } = data;
+        let { firstName, lastName, mobileNo, login_id, type } = data;
 
-        let query = 'INSERT INTO users (firstName,lastName,mobileNo,login_id,isActive,updatedAt,createdAt) VALUES (?,?,?,?,1,NOW(),NOW())';
-        let values = [firstName, lastName, mobileNo, login_id]
+        let query = 'INSERT INTO users (firstName,lastName,mobileNo,login_id,isActive,updatedAt,createdAt,type) VALUES (?,?,?,?,1,NOW(),NOW(),?)';
+        let values = [firstName, lastName, mobileNo, login_id, type]
 
         sql.query(query, values, (err, res) => {
             if (err) {
@@ -39,7 +39,8 @@ const saveLogin = (data) => {
 const saveOtp = (data) => {
     return new Promise((resolve, reject) => {
         let { requestId, requestType, requestValue, otp } = data;
-        let query = 'INSERT INTO otp_verification ( requestId, requestType, requestValue, otp, createdAt, updatedAt) VALUES (?,?,?,?,NOW(),NOW())';
+
+        let query = 'INSERT INTO otp_verification ( requestId, requestType, requestValue, otp, createdAt, updatedAt,otpExpiredOn) VALUES (?,?,?,?,NOW(),NOW(),DATE_ADD(NOW(), INTERVAL 10 MINUTE))';
         let values = [requestId, requestType, requestValue, otp]
 
         sql.query(query, values, (err, res) => {
@@ -71,12 +72,25 @@ const deleteOtp = (data) => {
     })
 }
 
-
+const updatePassword = (data) => {
+    return new Promise((resolve, reject) => {
+        let { new_password, email } = data
+        let query = `UPDATE login SET password='${new_password}' WHERE email = '${email}';`
+        // console.log(query);
+        sql.query(query, (err, res) => {
+            if (err) { return reject(err); }
+            else {
+                resolve(res);
+            }
+        })
+    })
+}
 
 module.exports =
 {
     signUpUser,
     saveOtp,
     deleteOtp,
-    saveLogin
+    saveLogin,
+    updatePassword
 }

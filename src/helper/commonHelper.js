@@ -41,7 +41,7 @@ const searchData = ({ tableName, whereCondition = '', columnName = '*', otherCon
         const whereConditions = whereCondition ? `WHERE  isActive = 1  ${whereCondition}` : '';
         const query = `SELECT ${columnName} FROM ${tableName} ${whereConditions} ${otherCondition}`;
         const values = [];
-        // console.log(query);
+        console.log(query);
         sql.query(query, values, (err, result) => {
             if (err) {
                 console.log("error", err)

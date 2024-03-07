@@ -234,8 +234,132 @@ const login = async (req, res) => {
     }
 }
 
+const signUpWithGoogle = async (req, res) => {
+    try {
+        let bodyData = req.body
+        let { firstName, lastName, email, type } = bodyData;
+        let message = '';
+        if (!firstName) {
+            message += errorMessage.FIRST_NAME_IS_REQUIRED
+        }
+        if (!lastName) {
+            message += errorMessage.MOBILE_NO_IS_REQUIRED
+        }
+        if (!email) {
+            message += errorMessage.EMAIL_IS_REQUIRED
+        }
+        if (!type) {
+            message += errorMessage.TYPE_IS_REQUIRED
+        }
+        if (message) {
+            logger.errorLogger.error(`Validation Error ` + message);
+            return res.status(400).json({ status: 400, message: message, data: [], error: true });
+        }
+
+        let checkUserExistanceDetail = {
+            tableName: "login",
+            whereCondition: ` AND email = '${email}'`
+        }
+        let emailExistance = await commonHelper.searchData(checkUserExistanceDetail);
+        if (emailExistance.length > 0) {
+            logger.errorLogger.error();
+            return res.status(400).json({ status: 400, message: errorMessage.USER_IS_ALREAY_EXIST, data: [], error: true });
+        }
+        // let checkMobileExistanceDetail = {
+        //     tableName: "users",
+        //     whereCondition: ` AND mobileNo = '${mobileNo}'`
+        // }
+        // let mobileExistance = await commonHelper.searchData(checkMobileExistanceDetail);
+        // // console.log(mobileExistance);
+        // if (mobileExistance.length > 0) {
+        //     logger.errorLogger.error();
+        //     return res.status(400).json({ status: 400, message: errorMessage.USER_MOBILENO_IS_ALREADY_EXIST, data: [], error: true });
+        // }
+
+        let saveEmailPassword = await userModal.saveLogin({ email, password: null });
+
+        bodyData.login_id = saveEmailPassword.insertId
+        let saveUser = await userModal.signUpUser(bodyData);
+        if (saveUser.affectedRows > 0) {
+            let tokenData = { firstName, lastName, email, id: saveUser.insertId };
+            let token = jwtAuthentication.signToken(tokenData);
+            let data = {};
+            data.id = saveUser.insertId
+            data.firstName = firstName
+            data.lastName = lastName
+            data.email = email
+            // data.mobileNo = mobileNo
+            data.token = token;
+            logger.infoLogger.info(successMessage.OTP_SENDED_ON_YOUR_EMAIL)
+            return res.status(200).json({ status: 200, message: successMessage.OTP_SENDED_ON_YOUR_EMAIL, data: data, error: false });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
+    }
+}
+
+
+const loginWithGoogle = async (req, res) => {
+    try {
+        let { email } = req.body;
+        let message = ''
+        if (!email) {
+            message += errorMessage.EMAIL_IS_REQUIRED
+        }
+
+        if (message) {
+            logger.errorLogger.error(`Validation error: ${message}`)
+            return res.status(400).json({
+                status: 400,
+                message: message,
+                data: [],
+                error: true,
+            });
+        }
+
+        let details = { tableName: `login`, whereCondition: ` AND email = '${email}'` }
+        let user = await commonHelper.searchData(details);
+        let userExtraDetails = { tableName: `users`, whereCondition: ` AND login_id = '${user[0].id}'` }
+        let userData = await commonHelper.searchData(userExtraDetails);
+        if (user.length > 0) {
+
+            let id = userData[0].id
+            let firstName = userData[0].firstName
+            let lastName = userData[0].lastName
+            let email = user[0].email
+            let mobileNo = userData[0].mobileNo
+
+            let data = {}
+            let tokenData = { id, firstName, lastName, email };
+            let token = jwtAuthentication.signToken(tokenData);
+            data.id = id
+            data.firstName = firstName
+            data.lastName = lastName
+            data.email = email
+            data.mobileNo = mobileNo
+            data.token = token;
+
+            logger.infoLogger.info(successMessage.LOGIN_SUCCESSFULL);
+            return res.status(200).json({
+                status: 200,
+                message: successMessage.LOGIN_SUCCESSFULL,
+                data: data,
+                error: false,
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
+    }
+}
+
 module.exports = {
     generatOtpForRegistration,
     verifyOtpForRegistration,
-    login
+    login,
+    signUpWithGoogle,
+    loginWithGoogle
 }
