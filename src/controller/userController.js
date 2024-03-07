@@ -170,13 +170,16 @@ const verifyOtpForRegistration = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        let { email, password } = req.body;
+        let { email, password, uuid } = req.body;
         let message = ''
         if (!email) {
             message += errorMessage.EMAIL_IS_REQUIRED
         }
         if (!password) {
             message += errorMessage.PASSWORD_IS_REQUIRED
+        }
+        if (!uuid) {
+            message += errorMessage.UUID_REQUIRED
         }
         if (message) {
             logger.errorLogger.error(`Validation error: ${message}`)
@@ -193,12 +196,29 @@ const login = async (req, res) => {
         let user = await commonHelper.searchData(details);
         let userExtraDetails = { tableName: `users`, whereCondition: ` AND login_id = '${user[0].id}'` }
         let userData = await commonHelper.searchData(userExtraDetails);
+
+        let captchaVerificationDetails = {
+            tableName: 'captcha_verification',
+            whereCondition: ` AND uuid = '${uuid}' AND isVerified = 1 AND expiryTimeStamp > NOW() `
+        }
+
+        let captchaVerificationTask = await commonHelper.searchData(captchaVerificationDetails)
+
         if (user.length > 0) {
 
             if (password != user[0].password) {
                 return res.status(400).send({
                     status: 400,
                     message: errorMessage.INVALID_PASSWORD,
+                    data: [],
+                    error: true,
+                });
+            }
+
+            if (captchaVerificationTask.length == 0) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorMessage.CAPTCHA_VERIFICATION_FAILED,
                     data: [],
                     error: true,
                 });

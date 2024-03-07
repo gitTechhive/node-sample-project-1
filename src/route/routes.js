@@ -1,6 +1,7 @@
 const controller = require('../controller/test');
 const userController = require('../controller/userController')
 const countryController = require('../controller/countryState')
+const verificationController = require('../controller/verificationController')
 module.exports = function (app) {
   app.route('/test').post(controller.uploadImage)
   /**
@@ -40,4 +41,8 @@ module.exports = function (app) {
   app.route('/master/citiesDropdown').get(countryController.getCityByStateId)
   app.route('/master/countryCodes').get(countryController.getCountryCodes)
   app.route('/user/changePassword').post(userController.changePassword)
+  app.route('/captcha/generate').get(verificationController.generateCaptcha)
+  app.route('/captcha/verification').post(verificationController.verifyCaptcha)
+  app.route('/captcha/reGenerate').post(verificationController.regenerateCaptcha)
+  app.route('/captcha/scheduller').delete(verificationController.autoDeleteCaptcha)
 }

@@ -14,4 +14,6 @@ module.exports = {
     PROFILE_IS_NOT_UPDATED: "Profile is Not Updated",
     PASSWORD_UPDATED_SUCCESSFULLY: "Password Updated Successfully",
     CAPTCHA_GENERATED: "Captcha generated successfully!",
+    CAPTCHA_VERIFIED: "Captcha verified successfully!",
+    OLD_CAPTCHA_DELETED: "Old captcha/s deleted successfully!"
 }

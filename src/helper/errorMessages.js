@@ -26,5 +26,7 @@ module.exports = {
     OLD_PASSWORD_IS_REQUIRED: "Old Password is Required",
     NEW_PASSWORD_IS_REQUIRED: "New Password is Required",
     OLD_PASSWORD_IS_WRONG: "Old Password is wrong",
-
+    CAPTCHA_EXPIRED: "Captcha expired please generate a new one!",
+    CAPTCHA_VERIFICATION_FAILED: "Captcha verification failed. Please retry!",
+    UUID_REQUIRED: "Uuid for captcha verification required!",
 }

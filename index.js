@@ -72,4 +72,5 @@ stompServer.subscribe('/echo', (msg, headers) => {
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
     require('./src/utils/testSchesuller'); // Start any additional server tasks
+    require('./src/utils/captchaScheduller')
 });
