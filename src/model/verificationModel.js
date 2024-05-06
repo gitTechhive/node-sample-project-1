@@ -2,11 +2,11 @@ const sql = require('../config/dbConfig');
 
 const insertCaptcha = (data) => {
     return new Promise((resolve, reject) => {
-        let { uuid, hiddenCaptcha, expiryTime } = data;
-
-        let query = 'INSERT INTO captcha_verification (uuid, hiddenCaptcha, createdAt, expiryTimeStamp) VALUES (?,?,NOW(),?)';
-        let values = [uuid, hiddenCaptcha, expiryTime]
-
+        let { uuId, hiddenCaptcha, expiryTime } = data;
+        // console.log(data)
+        let query = 'INSERT INTO captcha_verification (uuid, hidden_captcha, created_at, expiry_timestamp) VALUES (?,?,NOW(),?)';
+        let values = [uuId, hiddenCaptcha, expiryTime]
+        // console.log(query)
         sql.query(query, values, (err, res) => {
             if (err) {
                 console.log(err);
@@ -20,10 +20,10 @@ const insertCaptcha = (data) => {
 
 const deleteCaptcha = (data) => {
     return new Promise((resolve, reject) => {
-        let { uuid } = data;
+        let { uuId } = data;
 
         let query = `DELETE FROM captcha_verification WHERE uuid = ?`;
-        let values = [uuid]
+        let values = [uuId]
 
         sql.query(query, values, (err, res) => {
             if (err) {
@@ -38,10 +38,10 @@ const deleteCaptcha = (data) => {
 
 const updateStatus = (data) => {
     return new Promise((resolve, reject) => {
-        let { uuid } = data;
+        let { uuId } = data;
 
-        let query = `UPDATE captcha_verification SET isVerified = 1 WHERE uuid = ?`;
-        let values = [uuid]
+        let query = `UPDATE captcha_verification SET is_verified = 1 WHERE uuid = ?`;
+        let values = [uuId]
 
         sql.query(query, values, (err, res) => {
             if (err) {
@@ -58,7 +58,7 @@ const deleteOldCaptcha = (data) => {
     return new Promise((resolve, reject) => {
         let { dateTime } = data
 
-        let query = `DELETE FROM captcha_verification WHERE expiryTimeStamp < '${dateTime}';`;
+        let query = `DELETE FROM captcha_verification WHERE expiry_timestamp < '${dateTime}';`;
 
         sql.query(query, (err, res) => {
             if (err) {

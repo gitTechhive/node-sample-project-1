@@ -199,7 +199,7 @@ const login = async (req, res) => {
 
         let captchaVerificationDetails = {
             tableName: 'captcha_verification',
-            whereCondition: ` AND uuid = '${uuid}' AND isVerified = 1 AND expiryTimeStamp > NOW() `
+            whereCondition: ` AND uuid = '${uuid}' AND isVerified = 1 AND expiry_timestamp > NOW() `
         }
 
         let captchaVerificationTask = await commonHelper.searchData(captchaVerificationDetails)

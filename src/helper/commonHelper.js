@@ -41,7 +41,7 @@ const searchData = ({ tableName, whereCondition = '', columnName = '*', otherCon
         const whereConditions = whereCondition ? `WHERE 1=1 ${whereCondition}` : '';
         const query = `SELECT ${columnName} FROM ${tableName} ${whereConditions} ${otherCondition}`;
         const values = [];
-        // console.log(query);
+        console.log(query);
         sql.query(query, values, (err, result) => {
             if (err) {
                 console.log("error", err)
@@ -139,7 +139,7 @@ function generateFormattedName() {
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     const randomString = Math.random().toString(36).substr(2, 6);
-    
+
     const formattedName = `${year}${month}${day}_${hours}${minutes}${seconds}_${randomString}`;
 
     return formattedName;
