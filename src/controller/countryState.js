@@ -113,7 +113,7 @@ const getCountryCodes = async (req, res) => {
 
         let details = {
             tableName: "countries",
-            columnName: " CONCAT('(',phonecode,')',' ',name) AS labels, CONCAT('(',phonecode,')',' ',name) AS value "
+            columnName: " CONCAT('(',phonecode,')',' ',name) AS label, CONCAT('(',phonecode,')',' ',name) AS value "
         }
 
         let getCountryCodesTask = await commonHelper.searchData(details);

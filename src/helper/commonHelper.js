@@ -139,7 +139,7 @@ function generateFormattedName() {
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     const randomString = Math.random().toString(36).substr(2, 6);
-    
+
     const formattedName = `${year}${month}${day}_${hours}${minutes}${seconds}_${randomString}`;
 
     return formattedName;

@@ -14,7 +14,7 @@ const errorMessages = require('../helper/errorMessages');
 const generateCaptcha = async (req, res) => {
     try {
 
-        let uuid = uuidv4()
+        let uuId = uuidv4()
 
         let captcha = new Captcha();
 
@@ -23,7 +23,7 @@ const generateCaptcha = async (req, res) => {
         let hiddenCaptcha = captcha.value
 
         const currentTime = moment();
-        const minutesToAdd = 5;
+        const minutesToAdd = 10;
 
         // Add minutes to the current date and time
         const futureTime = currentTime.add(minutesToAdd, 'minutes');
@@ -31,11 +31,11 @@ const generateCaptcha = async (req, res) => {
         // Format the date as desired
         const expiryTime = futureTime.format('YYYY-MM-DD HH:mm:ss')
 
-        let insertCaptchaTask = await verificationModel.insertCaptcha({ uuid, hiddenCaptcha, expiryTime })
+        let insertCaptchaTask = await verificationModel.insertCaptcha({ uuId, hiddenCaptcha, expiryTime })
 
         let data = {
-            captchaUrl: captchaUrl,
-            uuid: uuid
+            realCaptcha: captchaUrl,
+            uuid: uuId
         }
 
         res.send({ status: 200, message: successMessages.CAPTCHA_GENERATED, data: data, error: false });
@@ -48,15 +48,15 @@ const generateCaptcha = async (req, res) => {
 
 const verifyCaptcha = async (req, res) => {
     try {
-        let { uuid, captcha } = req.query
+        let { uuId, captcha } = req.body
 
         let getCaptchaDetails = {
             tableName: 'captcha_verification',
-            whereCondition: ` AND uuid = '${uuid}' AND expiryTimeStamp > NOW()`
+            whereCondition: ` AND uuid = '${uuId}' AND expiry_timestamp > NOW()`
         }
 
         let getCaptchaTask = await commonHelper.searchData(getCaptchaDetails)
-
+        console.log(getCaptchaTask)
         if (getCaptchaTask.length == 0) {
             return res.status(403).send({ status: 403, message: errorMessages.CAPTCHA_EXPIRED, data: [], error: true })
         }
@@ -65,7 +65,7 @@ const verifyCaptcha = async (req, res) => {
 
         if (hiddenCaptcha === captcha) {
 
-            let updateCaptchaStatusTask = await verificationModel.updateStatus({ uuid })
+            let updateCaptchaStatusTask = await verificationModel.updateStatus({ uuId })
 
             return res.status(200).send({ status: 200, message: successMessages.CAPTCHA_VERIFIED, data: "SUCCESS", error: false })
 
@@ -77,16 +77,16 @@ const verifyCaptcha = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        return res.send({ status: 500, message: "Internal Server Error", data: error, error: true });
+        return res.status(500).send({ status: 500, message: "Internal Server Error", data: error, error: true });
     }
 }
 
 const regenerateCaptcha = async (req, res) => {
     try {
-        let { uuid } = req.query
-
-        let deleteCaptchaTask = await verificationModel.deleteCaptcha({ uuid })
-
+        // let { uuid } = req.query
+        let { uuId } = req.body
+        let deleteCaptchaTask = await verificationModel.deleteCaptcha({ uuId })
+        console.log(deleteCaptchaTask)
         let captcha = new Captcha();
 
         let captchaUrl = captcha.dataURL
@@ -94,7 +94,7 @@ const regenerateCaptcha = async (req, res) => {
         let hiddenCaptcha = captcha.value
 
         const currentTime = moment();
-        const minutesToAdd = 5;
+        const minutesToAdd = 10;
 
         // Add minutes to the current date and time
         const futureTime = currentTime.add(minutesToAdd, 'minutes');
@@ -102,11 +102,11 @@ const regenerateCaptcha = async (req, res) => {
         // Format the date as desired
         const expiryTime = futureTime.format('YYYY-MM-DD HH:mm:ss')
 
-        let insertCaptchaTask = await verificationModel.insertCaptcha({ uuid, hiddenCaptcha, expiryTime })
+        let insertCaptchaTask = await verificationModel.insertCaptcha({ uuId, hiddenCaptcha, expiryTime })
 
         let data = {
-            captchaUrl: captchaUrl,
-            uuid: uuid
+            realCaptcha: captchaUrl,
+            uuid: uuId
         }
 
         res.send({ status: 200, message: successMessages.CAPTCHA_GENERATED, data: data, error: false });
@@ -114,7 +114,7 @@ const regenerateCaptcha = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.send({ status: 500, message: "Internal Server Error", data: error, error: true });
+        res.status(500).send({ status: 500, message: "Internal Server Error", data: error, error: true });
     }
 }
 
