@@ -4,7 +4,7 @@ const signUpUser = (data) => {
     return new Promise((resolve, reject) => {
         let { firstName, lastName, mobileNo, login_id, type } = data;
 
-        let query = 'INSERT INTO users (firstName,lastName,mobileNo,login_id,isActive,updatedAt,createdAt,type) VALUES (?,?,?,?,1,NOW(),NOW(),?)';
+        let query = 'INSERT INTO users (firstName,lastName,mobileNo,login_id,isActive,updated_at,created_at,type) VALUES (?,?,?,?,1,NOW(),NOW(),?)';
         let values = [firstName, lastName, mobileNo, login_id, type]
 
         sql.query(query, values, (err, res) => {
@@ -22,7 +22,7 @@ const saveLogin = (data) => {
     return new Promise((resolve, reject) => {
         let { email, password } = data;
 
-        let query = 'INSERT INTO login (email,password,isActive,updatedAt,createdAt) VALUES (?,?,1,NOW(),NOW())';
+        let query = 'INSERT INTO login (email,password,is_active,updated_at,created_at) VALUES (?,?,1,NOW(),NOW())';
         let values = [email, password]
 
         sql.query(query, values, (err, res) => {
@@ -35,12 +35,28 @@ const saveLogin = (data) => {
         })
     })
 }
+const saveLoginWithGoogle = (data) => {
+    return new Promise((resolve, reject) => {
+        let { email, password, googleId } = data;
 
+        let query = 'INSERT INTO login (email,google_id,is_active,updated_at,created_at) VALUES (?,?,1,NOW(),NOW())';
+        let values = [email, googleId]
+
+        sql.query(query, values, (err, res) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            } else {
+                resolve(res)
+            }
+        })
+    })
+}
 const saveOtp = (data) => {
     return new Promise((resolve, reject) => {
         let { requestId, requestType, requestValue, otp } = data;
 
-        let query = 'INSERT INTO otp_verification ( requestId, requestType, requestValue, otp, createdAt, updatedAt,otpExpiredOn) VALUES (?,?,?,?,NOW(),NOW(),DATE_ADD(NOW(), INTERVAL 10 MINUTE))';
+        let query = 'INSERT INTO otp_verification ( request_id, request_type, request_value, otp, created_at, updated_at,otp_expired_on) VALUES (?,?,?,?,NOW(),NOW(),DATE_ADD(NOW(), INTERVAL 10 MINUTE))';
         let values = [requestId, requestType, requestValue, otp]
 
         sql.query(query, values, (err, res) => {
@@ -59,7 +75,7 @@ const deleteOtp = (data) => {
     return new Promise((resolve, reject) => {
         let { requestId } = data;
 
-        let query = `DELETE from otp_verification where requestId = '${requestId}'`;
+        let query = `DELETE from otp_verification where request_id = '${requestId}'`;
 
         sql.query(query, (err, res) => {
             if (err) {
@@ -90,13 +106,13 @@ const getProfile = (data) => {
     return new Promise((resolve, reject) => {
         let { id } = data
 
-        let query = `SELECT u.firstName, u.lastName, u.address, u.pincode, u.mobileNo, u.phoneCode, u.bio, l.email,
-        ud.originalName, ud.url, c.name AS country, s.name AS state, ci.name AS city FROM users u 
-        LEFT JOIN user_docs ud ON u.id = ud.user_id AND isDeleted = 0 
+        let query = `SELECT u.firstName, u.lastName, u.address, u.pincode as pinCode, u.mobileNo, u.bio, l.email,u.phoneCode as phonecode,u.country as country_id,u.state as state_id,u.city as cities_id,
+        ud.original_name, ud.url AS profilePicUrl, c.name AS country, s.name AS state, ci.name AS cities FROM users u 
+        LEFT JOIN user_docs ud ON u.id = ud.user_id
         LEFT JOIN login l ON l.id = u.login_id
-        LEFT JOIN countries c ON u.country_id = c.id
-        LEFT JOIN states s ON u.state_id = s.id
-        LEFT JOIN cities ci ON u.cities_id = ci.id WHERE u.id = ${id}`
+        LEFT JOIN countries c ON u.country = c.id
+        LEFT JOIN states s ON u.state = s.id
+        LEFT JOIN cities ci ON u.city = ci.id WHERE u.id = ${id}`
 
         sql.query(query, (err, res) => {
             if (err) {
@@ -114,12 +130,12 @@ const updateProfile = (data) => {
         let query = ``
         let values = []
 
-        let { firstName, lastName, mobileNo, address, country, state, city, pinCode, current_user, phonecode, email, login_id } = data;
+        let { firstName, lastName, mobileNo, address, country_id, state_id, cities_id, pinCode, current_user, phonecode, email, login_id, bio } = data;
 
         if (!login_id) {
-            query = `UPDATE users SET firstname = ?, lastName = ?, mobileNo = ?, updatedAt = NOW(), address = ?, country_id = ?,
-        state_id =?, cities_id =?, pinCode = ?, lastModifiedBy = ?, phoneCode = ? WHERE id = ?`;
-            values.push(firstName, lastName, mobileNo, address, country, state, city, pinCode, current_user, phonecode, current_user)
+            query = `UPDATE users SET firstname = ?, lastName = ?, mobileNo = ?, updated_at = NOW(), address = ?, country = ?,
+        state =?, city =?, pincode = ?, last_modified_by = ?, phoneCode = ?,bio = ? WHERE id = ?`;
+            values.push(firstName, lastName, mobileNo, address, country_id, state_id, cities_id, pinCode, current_user, phonecode, bio, current_user)
         }
         else {
             query = `UPDATE login SET email = ? WHERE id = ?`
@@ -163,7 +179,7 @@ const updateProfilePic = (data) => {
 
         let values = []
 
-        let query = `INSERT INTO user_docs(user_id, originalName, formattedName, url, createdAt, lastModifiedBy, createdBy) VALUES (?,?,?,?,NOW(),?,?)`
+        let query = `INSERT INTO user_docs(user_id, original_name, formatted_name, url, created_at, last_modified_by, created_by) VALUES (?,?,?,?,NOW(),?,?)`
 
         values.push(current_user, original_name, formatted_name, url, current_user, current_user)
 
@@ -203,5 +219,6 @@ module.exports =
     updateProfile,
     removeProfilePic,
     updateProfilePic,
-    changePassword
+    changePassword,
+    saveLoginWithGoogle
 }

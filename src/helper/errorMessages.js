@@ -37,4 +37,6 @@ module.exports = {
     CAPTCHA_EXPIRED: "Captcha expired please generate a new one!",
     CAPTCHA_VERIFICATION_FAILED: "Captcha verification failed. Please retry!",
     UUID_REQUIRED: "Uuid for captcha verification required!",
+    USER_NOT_FOUND: "User not found",
+    GOOGLE_ID_IS_MISSING: "Google Id is Missing"
 }

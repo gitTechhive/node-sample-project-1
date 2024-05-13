@@ -56,9 +56,9 @@ const verifyCaptcha = async (req, res) => {
         }
 
         let getCaptchaTask = await commonHelper.searchData(getCaptchaDetails)
-        console.log(getCaptchaTask)
+
         if (getCaptchaTask.length == 0) {
-            return res.status(403).send({ status: 403, message: errorMessages.CAPTCHA_EXPIRED, data: [], error: true })
+            return res.status(400).send({ status: 400, message: errorMessages.CAPTCHA_EXPIRED, data: [], error: true })
         }
 
         let hiddenCaptcha = getCaptchaTask[0].hiddenCaptcha
@@ -71,7 +71,7 @@ const verifyCaptcha = async (req, res) => {
 
         } else {
 
-            return res.status(403).send({ status: 403, message: errorMessages.CAPTCHA_VERIFICATION_FAILED, data: [], error: true })
+            return res.status(400).send({ status: 400, message: errorMessages.CAPTCHA_VERIFICATION_FAILED, data: [], error: true })
 
         }
 
@@ -86,7 +86,7 @@ const regenerateCaptcha = async (req, res) => {
         // let { uuid } = req.query
         let { uuId } = req.body
         let deleteCaptchaTask = await verificationModel.deleteCaptcha({ uuId })
-        console.log(deleteCaptchaTask)
+
         let captcha = new Captcha();
 
         let captchaUrl = captcha.dataURL

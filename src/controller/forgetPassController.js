@@ -101,7 +101,7 @@ const forgotPassOtpVerification = async (req, res) => {
         } else {
             let details = {
                 tableName: "otp_verification",
-                whereCondition: ` AND requestId = '${requestId}' AND requestValue = '${email}' And otp = '${otp}'`
+                whereCondition: ` AND request_id = '${requestId}' AND request_value = '${email}' And otp = '${otp}'`
             }
             let user = await commonHelper.searchData(details)
             if (user.length <= 0) {
@@ -109,7 +109,7 @@ const forgotPassOtpVerification = async (req, res) => {
             } else {
                 let details = {
                     tableName: "otp_verification",
-                    whereCondition: ` AND NOW() > otpExpiredOn AND requestId = '${requestId}'`
+                    whereCondition: ` AND NOW() > otp_expired_on AND requestId = '${requestId}'`
                 }
                 let user = await commonHelper.searchData(details)
                 if (user.length > 0) {

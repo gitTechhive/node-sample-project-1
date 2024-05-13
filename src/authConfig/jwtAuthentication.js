@@ -30,7 +30,7 @@ const auth = async (req, res, next) => {
     try {
         // Extract JWT token from request headers
         const token = req.headers.authorization?.split(' ')[1];
-        const nonSecurePaths = ['/test', '/generateOtpForRegistration', '/verifyOtpForRegistration', '/login', '/signupWithGoogle', '/loginWithGoogle', '/forgotPassOtpGeneratorAdmin', '/forgotPassOtpVerificationAdmin', '/addNewPassword']; // Define non-secure paths
+        const nonSecurePaths = ['/test', '/generateOtpForRegistration', '/verifyOtpForRegistration', '/login', '/users/singUpGoogle', '/loginWithGoogle', '/forgotPassOtpGeneratorAdmin', '/forgotPassOtpVerificationAdmin', '/addNewPassword', '/captcha/generate', '/master/countryCodes', '/captcha/verification', '/users/sendOtp', '/users/', '/sendOtpLoginPhoneNo', '/loginPhoneNo', '/captcha/reGenerate']; // Define non-secure paths
 
         // Check if request path is in non-secure paths, if yes, proceed to next middleware
         if (nonSecurePaths.includes(req.path)) {

@@ -31,7 +31,7 @@ const getCountryDropDown = async (req, res) => {
 
 const getStateByCountryId = async (req, res) => {
     try {
-        console.log(req.query)
+
         // logger.infoLogger.info(errorMessages.ENTERED_GET_COUNTRY_API)
         let { country_id } = req.query
         let message = '';
