@@ -19,7 +19,8 @@ const swaggerConfig = require('./src/config/swaggerConfig'); // Swagger configur
 const StompServer = require('stomp-broker-js'); // Stomp server for messaging
 const swaggerJSDoc = require('swagger-jsdoc');
 const config = require('./src/config/config')
-
+const db = require('./src/config/dbConfig')
+const axios = require("axios")
 // Set up CORS middleware to allow cross-origin requests
 app.use(cors());
 
@@ -68,9 +69,11 @@ stompServer.subscribe('/echo', (msg, headers) => {
     stompServer.send(path, {}, message);
 });
 
+
 // Start the server
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
     require('./src/utils/testSchesuller'); // Start any additional server tasks
     require('./src/utils/captchaScheduller')
 });
+

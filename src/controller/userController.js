@@ -241,11 +241,9 @@ const login = async (req, res) => {
             message += errorMessage.EMAIL_IS_REQUIRED
         }
 
-        if (type) {
-            if (type == 'google') {
-                if (!googleId) {
-                    message += errorMessage.GOOGLE_ID_IS_MISSING
-                }
+        if (type == "google") {
+            if (!googleId) {
+                message += errorMessage.GOOGLE_ID_IS_MISSING
             }
         } else {
             if (!password) {
@@ -291,7 +289,7 @@ const login = async (req, res) => {
         if (user.length > 0) {
             let userExtraDetails = { tableName: `users u Left join user_docs ud on u.id = ud.user_id`, columnName: `u.id,u.firstName,u.lastName,u.mobileNo,ud.url as profile_pic_url`, whereCondition: ` AND u.login_id = '${user[0].id}'` }
             let userData = await commonHelper.searchData(userExtraDetails);
-            if (type) {
+            if (type == "google") {
                 if (googleId != user[0].google_id) {
                     return res.status(400).send({
                         status: 400,

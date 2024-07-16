@@ -15,11 +15,21 @@ const getChartData = async (req, res) => {
             userDetail = JSON.parse(userDetail);
         }
 
-        let getData = await chartModel.getChartData()
+        let getData = await chartModel.getChartData();
+        let data = {
+            chartData: getData,
+            totalCustomer: 240,
+            totalCustomerPer: 40,
+            activeNow: 20,
+            activeNowPer: 40,
+            totalMember: 50,
+            totalMemberPer: 20,
+            myBalance: 500,
+            myBalancePer: 20
+        }
         if (getData.length > 0) {
-
             logger.infoLogger.info(successMessage.GET_DATA_SUCCESSFULL)
-            res.status(200).json({ status: 200, message: successMessage.GET_DATA_SUCCESSFULL, data: getData, error: false })
+            res.status(200).json({ status: 200, message: successMessage.GET_DATA_SUCCESSFULL, data: data, error: false })
         } else {
             logger.infoLogger.info(successMessage.NO_DATA_FOUND)
             res.status(200).json({ status: 200, message: successMessage.NO_DATA_FOUND, data: [], error: false })

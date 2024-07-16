@@ -10,6 +10,25 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME, // Database name
     timezone: 'Z', // Set timezone to UTC
 });
+connection.connect((err) => {
+    if (err) {
+        // logger.error('Error connecting to the database:', err.message);
+        console.error('Error connecting to the database:', err.message);
+        return;
+    }
+    // logger.info('Connected to the database successfully');
+    console.log('Connected to the database successfully');
+});
+
+connection.on('error', (err) => {
+    // logger.error('Database error:', err.message);
+    console.error('Database error:', err.message);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        // Handle connection lost error (for example, by attempting to reconnect)
+    } else {
+        throw err;
+    }
+});
 
 // Export the connection pool to be used in other modules
 module.exports = connection;
