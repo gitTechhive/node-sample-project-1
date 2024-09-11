@@ -2,7 +2,12 @@ const logger = require("../helper/logger");
 const successMessages = require("../helper/successMessages");
 const commonHelper = require("../helper/commonHelper")
 const errorMessages = require("../helper/errorMessages")
-
+/**
+ * Retrieves the list of countries for a dropdown menu.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends the list of countries or an error message.
+ */
 
 const getCountryDropDown = async (req, res) => {
     try {
@@ -28,7 +33,12 @@ const getCountryDropDown = async (req, res) => {
         res.status(500).send({ status: 500, message: errorMessages.SERVER_ERROR, data: [], error: true })
     }
 }
-
+/**
+ * Retrieves the list of states by country ID.
+ * @param {Object} req - The request object containing the country_id in the query.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends the list of states or an error message.
+ */
 const getStateByCountryId = async (req, res) => {
     try {
 
@@ -67,7 +77,12 @@ const getStateByCountryId = async (req, res) => {
         res.status(500).send({ status: 500, message: errorMessages.INTERNAL_SERVER_ERROR, data: [], error: true })
     }
 }
-
+/**
+ * Retrieves the list of cities by state ID.
+ * @param {Object} req - The request object containing the state_id in the query.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends the list of cities or an error message.
+ */
 const getCityByStateId = async (req, res) => {
     try {
         // logger.infoLogger.info(errorMessages.ENTERED_GET_CITY_API)
@@ -105,7 +120,12 @@ const getCityByStateId = async (req, res) => {
         res.status(500).send({ status: 500, message: errorMessages.INTERNAL_SERVER_ERROR, data: [], error: true })
     }
 }
-
+/**
+ * Retrieves a list of country codes and their respective country names.
+ * @param {Object} req - The request object (body can be used if needed).
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends the list of country codes or an error message.
+ */
 const getCountryCodes = async (req, res) => {
     try {
 

@@ -4,7 +4,12 @@ const commonHelper = require('../helper/commonHelper')
 const errorMessage = require('../helper/errorMessages');
 const logger = require('../helper/logger');
 const { json } = require('body-parser');
-
+/**
+ * Handles the request to get chart data and additional statistics.
+ * @param {Object} req - The request object containing headers and other data.
+ * @param {Object} res - The response object used to send back the result.
+ * @returns {Promise<void>} Sends a response with chart data or an error message.
+ */
 const getChartData = async (req, res) => {
     try {
 

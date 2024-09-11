@@ -10,7 +10,12 @@ const verificationModel = require('../model/verificationModel')
 const moment = require('moment');
 const successMessages = require('../helper/successMessages');
 const errorMessages = require('../helper/errorMessages');
-
+/**
+ * Generates a new CAPTCHA and stores it in the database.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns the CAPTCHA URL and UUID or an error message.
+ */
 const generateCaptcha = async (req, res) => {
     try {
 
@@ -45,7 +50,12 @@ const generateCaptcha = async (req, res) => {
         res.send({ status: 500, message: "Internal Server Error", data: error, error: true });
     }
 }
-
+/**
+ * Verifies the CAPTCHA provided by the user.
+ * @param {Object} req - The request object containing the UUID and CAPTCHA in the body.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success message if CAPTCHA is verified or an error message.
+ */
 const verifyCaptcha = async (req, res) => {
     try {
         let { uuId, captcha } = req.body
@@ -81,6 +91,12 @@ const verifyCaptcha = async (req, res) => {
     }
 }
 
+/**
+ * Regenerates a new CAPTCHA for the provided UUID.
+ * @param {Object} req - The request object containing the UUID in the body.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns the new CAPTCHA URL and UUID or an error message.
+ */
 const regenerateCaptcha = async (req, res) => {
     try {
         // let { uuid } = req.query
@@ -117,7 +133,12 @@ const regenerateCaptcha = async (req, res) => {
         res.status(500).send({ status: 500, message: "Internal Server Error", data: error, error: true });
     }
 }
-
+/**
+ * Deletes CAPTCHA records older than 7 days.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success message if old CAPTCHAs are deleted or an error message.
+ */
 const autoDeleteCaptcha = async (req, res) => {
     try {
 

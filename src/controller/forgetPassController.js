@@ -7,7 +7,12 @@ const { v4: uuidv4 } = require('uuid');
 const sendMail = require('../helper/emailSender');
 const CryptoJS = require("crypto-js");
 const jwtAuthentication = require('../authConfig/jwtAuthentication')
-
+/**
+ * Generates and sends an OTP to the user's email for password reset.
+ * @param {Object} req - The request object containing the email in the body.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends an OTP to the user's email or an error message.
+ */
 const forgotPassOtpGenerator = async (req, res) => {
     try {
         let message = ""
@@ -70,7 +75,12 @@ const forgotPassOtpGenerator = async (req, res) => {
         res.status(500).send({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: [], error: true })
     }
 }
-
+/**
+ * Verifies the OTP provided by the user for password reset.
+ * @param {Object} req - The request object containing email, otp, and requestId.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Verifies the OTP and responds with success or error.
+ */
 const forgotPassOtpVerification = async (req, res) => {
     try {
 
@@ -129,7 +139,12 @@ const forgotPassOtpVerification = async (req, res) => {
         res.status(500).send({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: [], error: false })
     }
 }
-
+/**
+ * Adds a new password for the user after OTP verification.
+ * @param {Object} req - The request object containing the new password and email.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Updates the user's password or returns an error.
+ */
 const addNewPassword = async (req, res) => {
     try {
 

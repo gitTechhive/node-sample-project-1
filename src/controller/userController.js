@@ -8,7 +8,12 @@ const sendMail = require('../helper/emailSender');
 const CryptoJS = require("crypto-js");
 const jwtAuthentication = require('../authConfig/jwtAuthentication')
 const config = require('../config/config')
-
+/**
+ * Generates an OTP for user registration and sends it to the user's email.
+ * @param {Object} req - The request object containing user details (firstName, lastName, email, mobileNo).
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends OTP to the user's email or an error message.
+ */
 const generatOtpForRegistration = async (req, res) => {
     try {
         logger.infoLogger.info("Entered Signup Api!!");
@@ -85,6 +90,12 @@ const generatOtpForRegistration = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
+/**
+ * Sends OTP to the user's phone number for registration or login.
+ * @param {Object} req - The request object containing phone number and country code.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends OTP to the user's phone or an error message.
+ */
 const sendOtpToPhone = async (req, res) => {
     try {
         logger.infoLogger.info("Entered Signup Api!!");
@@ -143,6 +154,12 @@ const sendOtpToPhone = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
+/**
+ * Verifies the OTP entered by the user during registration.
+ * @param {Object} req - The request object containing the OTP, request ID, and user details.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Verifies OTP and registers the user or returns an error message.
+ */
 const verifyOtpForRegistration = async (req, res) => {
     try {
         logger.infoLogger.info("Entered Signup Api!!");
@@ -231,7 +248,12 @@ const verifyOtpForRegistration = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
-
+/**
+ * Handles user login via email and password or Google login.
+ * @param {Object} req - The request object containing email, password, uuid, and Google login details.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success with user token or an error message.
+ */
 const login = async (req, res) => {
     try {
         let { email, password, uuid, type, googleId } = req.body;
@@ -350,7 +372,12 @@ const login = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
-
+/**
+ * Handles login via phone number and OTP.
+ * @param {Object} req - The request object containing OTP, phone number, and request ID.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success with user token or an error message.
+ */
 
 const loginWithPhone = async (req, res) => {
     try {
@@ -441,7 +468,12 @@ const loginWithPhone = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
-
+/**
+ * Handles sign-up using Google account details.
+ * @param {Object} req - The request object containing user details.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success with user token or an error message.
+ */
 const signUpWithGoogle = async (req, res) => {
     try {
         let bodyData = req.body
@@ -514,7 +546,12 @@ const signUpWithGoogle = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
-
+/**
+ * Fetches the profile details of the currently authenticated user.
+ * @param {Object} req - The request object containing the authorization token in headers.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns the user profile details or an error message.
+ */
 const getProfile = async (req, res) => {
     try {
 
@@ -541,6 +578,12 @@ const getProfile = async (req, res) => {
     }
 }
 
+/**
+ * Handles login using Google account details.
+ * @param {Object} req - The request object containing the user's email in the body.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns user details with token on successful login or an error message.
+ */
 
 const loginWithGoogle = async (req, res) => {
     try {
@@ -597,6 +640,12 @@ const loginWithGoogle = async (req, res) => {
     }
 }
 
+/**
+ * Updates the profile details of the currently authenticated user.
+ * @param {Object} req - The request object containing user details in the body and profile picture in files.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success message if the profile is updated or an error message.
+ */
 const editProfile = async (req, res) => {
     try {
 
@@ -737,7 +786,12 @@ const editProfile = async (req, res) => {
         return res.status(500).json({ status: 500, message: errorMessage.INTERNAL_SERVER_ERROR, data: error, error: true })
     }
 }
-
+/**
+ * Changes the password for the currently authenticated user.
+ * @param {Object} req - The request object containing old and new passwords in the body.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Returns success message if the password is updated or an error message.
+ */
 const changePassword = async (req, res) => {
     try {
         let bodyData = req.body;

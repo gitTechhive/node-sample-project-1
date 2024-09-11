@@ -1,5 +1,14 @@
 const sql = require('../config/dbConfig');
-
+/**
+ * Inserts a new user into the users table.
+ * @param {Object} data - Object containing user details.
+ * @param {string} data.firstName - User's first name.
+ * @param {string} data.lastName - User's last name.
+ * @param {string} data.mobileNo - User's mobile number.
+ * @param {string} data.login_id - The login ID associated with the user.
+ * @param {string} data.type - The type of user.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const signUpUser = (data) => {
     return new Promise((resolve, reject) => {
         let { firstName, lastName, mobileNo, login_id, type } = data;
@@ -17,7 +26,13 @@ const signUpUser = (data) => {
         })
     })
 }
-
+/**
+ * Saves login information into the login table.
+ * @param {Object} data - Object containing login details.
+ * @param {string} data.email - User's email.
+ * @param {string} data.password - User's password.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const saveLogin = (data) => {
     return new Promise((resolve, reject) => {
         let { email, password } = data;
@@ -35,6 +50,13 @@ const saveLogin = (data) => {
         })
     })
 }
+/**
+ * Saves login information for a user signing up with Google.
+ * @param {Object} data - Object containing login details.
+ * @param {string} data.email - User's email.
+ * @param {string} data.googleId - The Google ID associated with the user.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const saveLoginWithGoogle = (data) => {
     return new Promise((resolve, reject) => {
         let { email, password, googleId } = data;
@@ -52,6 +74,15 @@ const saveLoginWithGoogle = (data) => {
         })
     })
 }
+/**
+ * Saves an OTP into the otp_verification table.
+ * @param {Object} data - Object containing OTP details.
+ * @param {string} data.requestId - The request ID for OTP.
+ * @param {string} data.requestType - The type of request.
+ * @param {string} data.requestValue - The value associated with the request.
+ * @param {string} data.otp - The OTP code.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const saveOtp = (data) => {
     return new Promise((resolve, reject) => {
         let { requestId, requestType, requestValue, otp } = data;
@@ -70,7 +101,12 @@ const saveOtp = (data) => {
         })
     })
 }
-
+/**
+ * Deletes an OTP from the otp_verification table using request ID.
+ * @param {Object} data - Object containing the request ID.
+ * @param {string} data.requestId - The request ID for deleting the OTP.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const deleteOtp = (data) => {
     return new Promise((resolve, reject) => {
         let { requestId } = data;
@@ -87,7 +123,13 @@ const deleteOtp = (data) => {
         })
     })
 }
-
+/**
+ * Updates the password in the login table for a specific email.
+ * @param {Object} data - Object containing email and new password.
+ * @param {string} data.new_password - The new password.
+ * @param {string} data.email - The email associated with the login.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const updatePassword = (data) => {
     return new Promise((resolve, reject) => {
         let { new_password, email } = data
@@ -101,7 +143,12 @@ const updatePassword = (data) => {
         })
     })
 }
-
+/**
+ * Retrieves the profile of a user based on the user ID.
+ * @param {Object} data - Object containing the user ID.
+ * @param {number} data.id - The user ID.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const getProfile = (data) => {
     return new Promise((resolve, reject) => {
         let { id } = data
@@ -124,7 +171,11 @@ const getProfile = (data) => {
         })
     })
 }
-
+/**
+ * Updates the user profile or email based on the presence of login_id.
+ * @param {Object} data - Object containing profile details.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const updateProfile = (data) => {
     return new Promise((resolve, reject) => {
         let query = ``
@@ -151,7 +202,12 @@ const updateProfile = (data) => {
         });
     });
 };
-
+/**
+ * Removes the profile picture of the current user by deleting the entry in user_docs table.
+ * @param {Object} data - Object containing the current user ID.
+ * @param {number} data.current_user - The ID of the current user.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const removeProfilePic = (data) => {
     return new Promise((resolve, reject) => {
         let { current_user } = data
@@ -168,7 +224,11 @@ const removeProfilePic = (data) => {
         })
     })
 }
-
+/**
+ * Updates the profile picture for the current user in the user_docs table.
+ * @param {Object} data - Object containing profile picture details.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const updateProfilePic = (data) => {
     return new Promise((resolve, reject) => {
         let { original_name,
@@ -193,7 +253,14 @@ const updateProfilePic = (data) => {
         })
     })
 }
-
+/**
+ * Changes the user's password in the login table.
+ * @param {Object} data - Object containing the user ID, new password, and login ID.
+ * @param {number} data.current_user - The ID of the current user.
+ * @param {string} data.newPassword - The new password.
+ * @param {number} data.login_id - The login ID associated with the user.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const changePassword = (data) => {
     return new Promise((resolve, reject) => {
         let { current_user, newPassword, login_id } = data;

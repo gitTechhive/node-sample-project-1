@@ -1,5 +1,13 @@
 const sql = require('../config/dbConfig');
 
+/**
+* Inserts captcha details into the captcha_verification table.
+* @param {Object} data - Object containing captcha data.
+* @param {string} data.uuId - The unique identifier for the captcha.
+* @param {string} data.hiddenCaptcha - The hidden captcha value.
+* @param {string} data.expiryTime - The expiry timestamp for the captcha.
+* @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+*/
 const insertCaptcha = (data) => {
     return new Promise((resolve, reject) => {
         let { uuId, hiddenCaptcha, expiryTime } = data;
@@ -17,7 +25,12 @@ const insertCaptcha = (data) => {
         })
     })
 }
-
+/**
+ * Deletes captcha from the captcha_verification table using UUID.
+ * @param {Object} data - Object containing the UUID for captcha deletion.
+ * @param {string} data.uuId - The unique identifier for the captcha.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const deleteCaptcha = (data) => {
     return new Promise((resolve, reject) => {
         let { uuId } = data;
@@ -35,7 +48,12 @@ const deleteCaptcha = (data) => {
         })
     })
 }
-
+/**
+ * Updates the is_verified status to true for a given captcha UUID.
+ * @param {Object} data - Object containing the UUID for the captcha.
+ * @param {string} data.uuId - The unique identifier for the captcha.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const updateStatus = (data) => {
     return new Promise((resolve, reject) => {
         let { uuId } = data;
@@ -53,7 +71,12 @@ const updateStatus = (data) => {
         })
     })
 }
-
+/**
+ * Deletes all captchas from the captcha_verification table that have expired.
+ * @param {Object} data - Object containing the current date-time for comparison.
+ * @param {string} data.dateTime - The current date-time used to filter expired captchas.
+ * @returns {Promise<Object>} Promise resolving to the result of the SQL query.
+ */
 const deleteOldCaptcha = (data) => {
     return new Promise((resolve, reject) => {
         let { dateTime } = data
